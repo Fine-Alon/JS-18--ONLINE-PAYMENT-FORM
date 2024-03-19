@@ -1,4 +1,4 @@
-import { setChildren} from "redom";
+import {setChildren} from "redom";
 import {PaymentForm} from "./jsModules/paymentForm.js";
 
 
