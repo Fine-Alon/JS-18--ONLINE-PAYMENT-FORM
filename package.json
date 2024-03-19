@@ -5,8 +5,8 @@
   "scripts": {
     "lint": "eslint ./",
     "lint:report": "eslint ./",
-    "dev": "parcel index.html",
-    "build": "parcel build index.html"
+    "dev": "parcel index.html --open --no-cache",
+    "build": "parcel build index.html --no-cache"
   },
   "author": "Alon Fine",
   "devDependencies": {
@@ -14,7 +14,11 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-formatter-gitlab": "^2.1.0",
     "eslint-plugin-import": "^2.22.1",
-    "parcel": "^2.12.0",
+    "parcel": "^2.12.0"
+  },
+  "dependencies": {
+    "card-validator": "^9.1.0",
+    "inputmask": "^5.0.8",
     "redom": "^3.0.0"
   }
 }
