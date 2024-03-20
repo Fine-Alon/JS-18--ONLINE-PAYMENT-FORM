@@ -1,35 +1,41 @@
 import {el, setChildren} from "redom";
 import {isNumberValid} from "./cardValidator.js";
 import Inputmask from "inputmask"
-import {getCurrentMonthNumber, getCurrentYear} from "../helpers/getDate";
+import {cvcInputListener, emailInputListener, expirationInputListener} from "../helpers/eventListeners.js";
 
 export const PaymentForm = () => {
   const form = el('form.p-3.w-50', {class: 'payment-form'})
   const cardNumberInput = el('div.mb-3', el('input.w-75', {type: 'text', placeholder: 'Card Number', required: true}))
   const expirationInput = el('input.w-25.me-3', {type: 'text', placeholder: 'MM/YY', required: true})
   const cvcInput = el('input.w-25', {type: 'text', placeholder: 'CVC/CVV', required: true})
-  const emailInput = el('div.mb-3', el('input', {type: 'email', placeholder: 'Email', required: true}))
+  const emailInput = el('div.mb-3.parentOfEmail', el('input', {type: 'email', placeholder: 'Email', required: true}))
   const submitButton = el('div.mb-3', el('button.btn.btn-secondary.w-25', {type: 'submit'}, 'Pay'))
   const numberField = cardNumberInput.querySelector('input');
+  const emailField = emailInput.querySelector('input');
 
-  const inputDateError = el('p.text-danger', 'Error: Year or month is before current date')
+  const inputDateError = el('p.text-danger.inputError', 'Error: Year or month is before current date')
+  const inputCvcError = el('p.text-danger.inputError', 'Error: must be 3 numbers')
+  const inputEmailError = el('p.text-danger.inputError', 'Error: E-mail is not correct')
+  const inputCardError = el('p.text-danger.inputError', 'Error: Card number is not correct')
 
-  expirationInput.addEventListener('blur', (e) => {
-    const currentMonth = getCurrentMonthNumber()
-    const currentYear = getCurrentYear()
-    let inputtedMonth = e.target.value.slice(0, 2)
-    const inputtedYear = e.target.value.slice(3)
-
-    //if starts with '0' like '01 or 02...'  so we remove '0' for next validation
-    if (inputtedMonth.startsWith('0')) inputtedMonth = inputtedMonth.slice(1)
-
-    if (inputtedYear < currentYear || (inputtedYear === currentYear && inputtedMonth < currentMonth)) {
-      document.querySelector('.parentOfCvcAndDate').append(inputDateError)
-    }
-
+  expirationInput.addEventListener('blur', e => {
+    expirationInputListener(e.target.value, inputDateError)
   })
-  expirationInput.addEventListener('input', (e) => {
+  cvcInput.addEventListener('blur', e => {
+    cvcInputListener(e.target.value, inputCvcError)
+  })
+  emailField.addEventListener('blur', e => {
+    emailInputListener(e.target.value, inputEmailError)
+  })
+
+  expirationInput.addEventListener('input', () => {
     inputDateError.remove()
+  })
+  cvcInput.addEventListener('input', () => {
+    inputCvcError.remove()
+  })
+  emailField.addEventListener('input', () => {
+    inputEmailError.remove()
   })
 
   Inputmask('9999-9999-9999-9999[-99][-99]').mask(numberField);
@@ -41,10 +47,9 @@ export const PaymentForm = () => {
     el('h2', 'Online Payment Form'),
     cardNumberInput,
     el('div.mb-3.parentOfCvcAndDate', expirationInput, cvcInput,),
-    // emailInput,
+    emailInput,
     submitButton
   )
-
 
   // Attach form submission event listener
   form.addEventListener('submit', (e) => {
