@@ -7,7 +7,7 @@ export function fieldErrorRemover(fieldType, errorElement) {
     if (!touchedInputs[fieldType.placeholder]) {
       touchedInputs[fieldType.placeholder] = 'touched'
     }
-    // console.log(touchedInputs)
+
     errorElement.remove()
   })
 }
