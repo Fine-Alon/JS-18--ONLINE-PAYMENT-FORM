@@ -9,7 +9,7 @@ export function expirationInputListener(value, inputError) {
   //if starts with '0' like '01 or 02...'  so we remove '0' for next validation
   if (inputtedMonth.startsWith('0')) inputtedMonth = inputtedMonth.slice(1)
 
-  if (inputtedYear < currentYear || (inputtedYear === currentYear && inputtedMonth < currentMonth)) {
+  if (inputtedYear < currentYear || (inputtedYear === currentYear && parseInt(inputtedMonth) < parseInt(currentMonth))) {
     document.querySelector('.parentOfCvcAndDate').append(inputError)
   }
 }

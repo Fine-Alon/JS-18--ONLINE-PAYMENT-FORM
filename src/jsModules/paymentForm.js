@@ -2,6 +2,8 @@ import {el, setChildren} from "redom";
 import {isNumberValid} from "./cardValidator.js";
 import Inputmask from "inputmask"
 import {cvcInputListener, emailInputListener, expirationInputListener} from "../helpers/eventListeners.js";
+import {fieldErrorCheckerOnBlur} from "../helpers/fieldErrorCheckerOnBlur.js";
+import {fieldErrorRemover} from "../helpers/fieldErrorRemover.js";
 
 export const PaymentForm = () => {
   const form = el('form.p-3.w-50', {class: 'payment-form'})
@@ -18,25 +20,13 @@ export const PaymentForm = () => {
   const inputEmailError = el('p.text-danger.inputError', 'Error: E-mail is not correct')
   const inputCardError = el('p.text-danger.inputError', 'Error: Card number is not correct')
 
-  expirationInput.addEventListener('blur', e => {
-    expirationInputListener(e.target.value, inputDateError)
-  })
-  cvcInput.addEventListener('blur', e => {
-    cvcInputListener(e.target.value, inputCvcError)
-  })
-  emailField.addEventListener('blur', e => {
-    emailInputListener(e.target.value, inputEmailError)
-  })
+  fieldErrorCheckerOnBlur(expirationInput,inputDateError,expirationInputListener)
+  fieldErrorCheckerOnBlur(cvcInput,inputCvcError,cvcInputListener)
+  fieldErrorCheckerOnBlur(emailField,inputEmailError,emailInputListener)
 
-  expirationInput.addEventListener('input', () => {
-    inputDateError.remove()
-  })
-  cvcInput.addEventListener('input', () => {
-    inputCvcError.remove()
-  })
-  emailField.addEventListener('input', () => {
-    inputEmailError.remove()
-  })
+  fieldErrorRemover(expirationInput,inputDateError)
+  fieldErrorRemover(cvcInput,inputCvcError)
+  fieldErrorRemover(emailField,inputEmailError)
 
   Inputmask('9999-9999-9999-9999[-99][-99]').mask(numberField);
   Inputmask({alias: "datetime", inputFormat: "mm/yy", placeholder: "MM/YY"}).mask(expirationInput);
