@@ -1,16 +1,32 @@
 const path = require('path');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 
-module.exports = {
+module.exports = (env) => ({
   entry: './src/index.js',
   output: {
-    filename: 'main.js',
+    filename: 'main.[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
     static: path.resolve(__dirname, 'dist'),
     hot: true,
+  },
+  optimization: {
+    minimizer: [
+      '...',
+      new ImageMinimizerPlugin({
+        minimizer: {
+          implementation: ImageMinimizerPlugin.sharpMinify,
+          options: {
+            png: {
+              quality: 10,
+            },
+          },
+        },
+      }),
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({ template: './src/index.html' }),
@@ -18,26 +34,35 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
+        test: /\.(?:js|mjs|cjs)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env', { targets: 'defaults' }],
+            ],
+          },
+        },
       },
       {
         test: /\.(scss)$/,
         use: [
           {
-            // Adds CSS to the DOM by injecting a `<style>` tag
             loader: 'style-loader',
           },
           {
-            // Interprets `@import` and `url()` like `import/require()` and will resolve them
             loader: 'css-loader',
           },
           {
-            // Loads a SASS/SCSS file and compiles it to CSS
             loader: 'sass-loader',
           },
         ],
       },
+      {
+        test: /\.(png|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
     ],
   },
-};
+});

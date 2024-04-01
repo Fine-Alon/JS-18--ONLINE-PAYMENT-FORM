@@ -10,7 +10,7 @@ import { fieldErrorCheckerOnBlur } from '../helpers/fieldErrorCheckerOnBlur.js';
 // eslint-disable-next-line import/no-cycle,import/extensions
 import { fieldErrorRemover } from '../helpers/fieldErrorRemover.js';
 // eslint-disable-next-line import/extensions
-import getAppropriateImgFofCardType from '../helpers/getAppropriateImgFofCardType.js';
+import filterImgForCardType from '../helpers/filterImgForCardType.js';
 
 export const touchedInputs = {};
 export const PaymentForm = () => {
@@ -54,14 +54,19 @@ export const PaymentForm = () => {
     const isValid = valid.number(e.target.value.toString());
     if (isValid.card) {
       // check what kind of card we get and so equal it to appropriate img
-      imgData = getAppropriateImgFofCardType(isValid.card.type);
-      const cardTypeImg = img({
-        src: imgData.src,
-        alt: imgData.alt,
-        width: 20,
-        height: 15,
-      });
-      cardTypeDiv.textContent = cardTypeImg;
+      imgData = filterImgForCardType(isValid.card.type);
+      if (imgData.src) {
+        const cardTypeImg = el('img', {
+          src: imgData.src,
+          alt: imgData.alt,
+          // width: 55,
+          style: {
+            maxWidth: '55px', // Set max-width to 30 pixels
+            maxHeight: '30px', // Set max-width to 30 pixels
+          },
+        });
+        cardTypeDiv.append(cardTypeImg);
+      }
     } else {
       cardTypeDiv.textContent = '';
     }
