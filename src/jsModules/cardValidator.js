@@ -1,12 +1,16 @@
 import valid from "card-validator"
 
-export const cardValidator = (num, inputError) => {
-  const isValid = valid.number(num.toString())
-  const cardNumberBox = document.querySelector('.parentOfCardNum')
-
-  if (!isValid.isPotentiallyValid) {
-    // renderInvalidCardNumber();
-    cardNumberBox.append(inputError)
-  }
+ const isCardNumCorrect = (num) => {
+    const isValid = valid.number(num.toString())
+    return isValid.isPotentiallyValid
 }
 
+const cardValidator = (num, inputError) => {
+    const isCardValid = isCardNumCorrect(num)
+    const cardNumberBox = document.querySelector('.parentOfCardNum')
+
+    if (!isCardValid) {
+        cardNumberBox.append(inputError)
+    }
+}
+export  {cardValidator,isCardNumCorrect}
