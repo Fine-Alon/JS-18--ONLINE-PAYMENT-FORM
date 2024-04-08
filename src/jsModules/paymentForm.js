@@ -1,16 +1,12 @@
-import { el, setChildren, img } from 'redom';
+import { el, setChildren } from 'redom';
 import Inputmask from 'inputmask';
 import valid from 'card-validator';
-// eslint-disable-next-line import/extensions
 import { cardValidator } from './cardValidator.js';
-// eslint-disable-next-line import/extensions
 import { cvcInputListener, emailInputListener, expirationInputListener } from './eventListeners.js';
-// eslint-disable-next-line import/no-cycle,import/extensions
 import { fieldErrorCheckerOnBlur } from '../helpers/fieldErrorCheckerOnBlur.js';
-// eslint-disable-next-line import/no-cycle,import/extensions
 import { fieldErrorRemover } from '../helpers/fieldErrorRemover.js';
-// eslint-disable-next-line import/extensions
 import filterImgForCardType from '../helpers/filterImgForCardType.js';
+import createFormFields from './createFormFields';
 
 export const touchedInputs = {};
 export const PaymentForm = () => {
@@ -96,9 +92,7 @@ export const PaymentForm = () => {
   // Append form elements to the container
   setChildren(form, [
     el('h2', 'Online Payment Form'),
-    cardNumberInput,
-    el('div.mb-3.parentOfCvcAndDate', expirationInput, cvcInput),
-    emailInput,
+    createFormFields(),
     submitButtonBox]);
 
   // Attach form submission event listener
