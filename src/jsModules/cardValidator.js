@@ -2,7 +2,7 @@ import valid from "card-validator"
 
  const isCardNumCorrect = (num) => {
     const isValid = valid.number(num.toString())
-    return isValid.isPotentiallyValid
+    return isValid.isValid
 }
 
 const cardValidator = (num, inputError) => {

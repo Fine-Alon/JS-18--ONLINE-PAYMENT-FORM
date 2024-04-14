@@ -17,7 +17,7 @@ describe('card validation', () => {
         .toBe(false);
     });
     test('card number is valid', () => {
-      expect(isCardNumCorrect(4580633344343466))
+      expect(isCardNumCorrect(2223000048410010))
         .toBe(true);
     });
     test('card number has just numbers', () => {

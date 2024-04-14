@@ -6,10 +6,13 @@ module.exports = {
     es2021: true,
     'jest/globals': true,
   },
-  extends: ['eslint:recommended'],
+  plugins: ['jest', 'prettier'],
+  extends: ['eslint:recommended', 'prettier'],
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['jest'],
+  rules: {
+    'prettier/prettier': 'error'
+  }
 };
